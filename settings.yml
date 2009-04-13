@@ -1,0 +1,53 @@
+# Public URL of website:
+public_url: 'http://linuxplumbersconf.org/'
+
+# Organization running event:
+organization: 'Linux Plumbers Conf'
+
+# Abbreviated name for use in URLs and proposal slugs.
+organization_slug: 'lpc'
+
+# Top-level tagline or description.
+tagline: 'Developing the Kernel, Libraries and Utilities / September 23-25, 09 / Portland, OR'
+
+# Breadcrumbs that are always visible, each breadcrumb is a name and URI:
+breadcrumbs: []
+
+# Timezone for dates in this application:
+timezone: 'Pacific Time (US & Canada)'
+
+# Can people create proposals without logging in?
+have_anonymous_proposals: false
+
+# Do proposals have excerpts?
+have_proposal_excerpts: true
+
+# Do events have tracks?
+have_event_tracks: true
+
+# Do events have session types?
+have_event_session_types: true
+
+# Display events picker so user can pick between multiple events?
+have_events_picker: false
+
+# Are proposals associated with multiple presenters?
+have_multiple_presenters: true
+
+# Can people upload pictures of themselves?
+have_user_pictures: true
+
+# Is profile information, like biography, stored in the User record? Else stored in Proposal.
+have_user_profiles: true
+
+# Do events have rooms?
+have_event_rooms: true
+
+# Can proposals have start times?
+have_proposal_start_times: true
+
+# Can proposals have statuses?
+have_proposal_statuses: true
+
+# Can users add comments until a toggle is flipped on the event?
+have_event_proposal_comments_after_deadline: true

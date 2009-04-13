@@ -1,0 +1,10 @@
+The common_css directory holds a copy of the LPC styleshets for local
+development.
+
+You can run rake lpc:styles to checkout a copy of the latest common
+styles.
+
+Modifications to the common styles should be submitted to the style
+repository at:
+
+http://github.com/philips/lpcstyle/tree/master
