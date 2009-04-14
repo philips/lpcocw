@@ -331,8 +331,14 @@ div.rnd_content {
 
 .submit-a-proposal-wrapper {
   margin: 1em 0;
-  text-align: center
+  text-align: center;
 }
+
+.submit-a-proposal-wrapper a {
+  color:#CC1100;
+  text-size: large;
+}
+
 
 /* @end */
 
@@ -566,6 +572,34 @@ ul.speakers .note li {
 	text-indent: -999px;
 	position: absolute;
 	left: 1em;
+}
+
+/* @end */
+/* @group Rails Common Elements */
+
+/* @group Flash Notices */
+
+.flash p {
+	margin: 0.5em 0;
+	padding: 0.5em;
+}
+
+.flash .notice {
+	color: #555555;
+	background: #f1f9ff;
+	border: 1px solid #116db6;
+}
+
+.flash .success {
+	color: #555555;
+	background: #e1ffe8;
+	border: 1px solid #08b9a6;
+}
+
+.flash .failure {
+	color: #555555;
+	background: #ffeded;
+	border: 1px solid #c60000;
 }
 
 /* @end */
