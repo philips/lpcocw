@@ -69,7 +69,7 @@ div.admin-only {
 	top: 50%;
 	left: 50%;
 	color: black;
-	background: url(/images/spinner-big.gif) no-repeat center #F7F1A3;
+	background: url(/ocw/images/spinner-big.gif) no-repeat center #F7F1A3;
 	text-align: center;
 	padding: 10px;
 	font: normal 16px Tahoma, Geneva, sans-serif;
@@ -99,32 +99,32 @@ div.admin-only {
 }
 
 .addable {
-	background-image: url('/images/plus.png');
+	background-image: url('/ocw/images/plus.png');
 }
 
 .showable {
-	background-image: url('/images/document.png');
+	background-image: url('/ocw/images/document.png');
 }
 
 .editable,
 .snippet_edit_link {
-	background-image: url('/images/edit.png');
+	background-image: url('/ocw/images/edit.png');
 }
 
 .cancelable {
-	background-image: url('/images/arrow-out.png');
+	background-image: url('/ocw/images/arrow-out.png');
 }
 
 .deletable {
-	background-image: url('/images/redx.png');
+	background-image: url('/ocw/images/redx.png');
 }
 
 .feedable {
-	background-image: url('/images/feed.png');
+	background-image: url('/ocw/images/feed.png');
 }
 
 .spinning {
-	background-image: url('/images/spinner.gif');
+	background-image: url('/ocw/images/spinner.gif');
 }
 
 /* @end */
