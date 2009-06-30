@@ -15,20 +15,18 @@
   <% if %w[preview production].include?(RAILS_ENV) %>
     <%= stylesheet_link_tag 'http://linuxplumbersconf.org/2009/style/style.css' %>
   <% else %>
-    <%= theme_stylesheet_link_tag 'common_css/osbp_common_v3.css' %>
+    <%= theme_stylesheet_link_tag 'http://linuxplumbersconf.org/2009/style/style.css' %>
   <% end %>
   <%= theme_stylesheet_link_tag "custom" %>
   <%= yield :stylesheets %>
 
   <!-- Dynamic styles -->
-  <% if event_tracks? %>
-    <style type="text/css" media="screen">
-      <% for track in Track.find(:all) %>
-        /* <%= track.title %> */
-        .<%= track_css_class(track) %> { color: <%= track.color %>; }
-        .<%= track_css_class(track) %>.block { background: <%= track.color %>; color: #fff; }
-      <% end %>
-    </style>
+  <% cache "layout,event_track_styles,event_#{current_event_cache_key}" do %>
+    <% if @event && event_tracks? %>
+      <style type="text/css" media="screen">
+        <%= render :partial => 'tracks/colors.css.erb', :locals => {:tracks => @event.tracks_descend} %>
+      </style>
+    <% end %>
   <% end %>
 
   <!-- Scripts -->
@@ -36,8 +34,19 @@
   <%= javascript_include_tag("jquery-ui.effects.core") %>
   <%= javascript_include_tag("jquery-ui.effects.highlight") %>
   <%= javascript_include_tag("application") %>
-  <%= yield :scripts %>
-  <%# TODO Add script and stylesheet yield blocks to other themes %>
+  
+  <%# TODO Add script and stylesheet yield blocks to other themes -%>
+  <%= yield :scripts -%>
+
+  <% expose_to_js( :current_user, current_user == :false ? false : current_user.id ) -%>
+  <% expose_to_js( :authenticity_token, form_authenticity_token ) if protect_against_forgery? -%>
+
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+<%=       indent_block( yield(:javascript_expose_values), 3) -%>
+<%=       indent_block( yield(:javascript_on_ready), 3) -%>
+    });
+  </script>
 </head>
 
 <% remote_base = SETTINGS.public_url %>
@@ -67,10 +76,8 @@
       </div>
 
       <div id="container">
-
         <div id="content">
-            <h2 class='entry-title'>Proposals</h2>
-
+          <h2 class='entry-title'>Proposals</h2>
           <% if false %>
             <%# RB: temporarily removing breadcrumbs, pending improvement %>
             <div id="breadcrumbs">
@@ -86,7 +93,7 @@
             </div>
           <% end %>
 
-          <h2><%= page_title %></h2>
+          <h2 class='page_title'><%= page_title %></h2>
 
           <!-- Display notices -->
           <%# flash[:success] = "This test is for testing the notifications." %>
@@ -108,10 +115,12 @@
                   <% if user_profiles? %>
                     <li><%= link_to "My profile", user_path(current_user) %> (<%= link_to "edit", edit_user_path(current_user) %>)</li>
                   <% end %>
+                  <li><%= link_to "My favorites", user_favorites_path(current_user) %></li>
                   <li><%= link_to "Logout", logout_path, :method => :delete %></li>
                 </ul>
               </li>
 
+              <% cache "layout,my_proposals,user_#{current_user.id},event_#{current_event_cache_key}" do %>
               <% if ! current_user.proposals.empty? || @event.ergo.accepting_proposals? %>
                 <li id='my-proposals'>
                   <h3>My proposals</h3>
@@ -127,20 +136,27 @@
                   </ul>
                 </li>
               <% end %>
+              <% end %>
 
               <% if admin? %>
                 <li class='administration'>
                   <h3>Administer</h3>
                   <ul>
-                    <% if user_profiles? %>
-                      <li><%= link_to "Users", users_path %></li>
-                    <% end %>
-                    <li><%= link_to "Events", manage_events_path %></li>
-                    <% if @event %>
-                      <li>
-                        <%= link_to "Manage this event", manage_event_path(@event) %>
+                    <li>
+                      <%= link_to "Events", manage_events_path %>
+                      <% if @event && ! @event.new_record? %>
+                        (<%= link_to "manage this event", manage_event_path(@event) %>)
                         <ul>
-                          <li><%= link_to "Proposals", event_proposals_path(@event) %> (<%= link_to "bulk edit", manage_event_proposals_path(@event) %>)</li>
+                          <% if proposal_statuses? %>
+                            <li><%= link_to "Sessions", event_sessions_path(@event) %></li>
+                          <% end %>
+                          <li><%= link_to "Proposals", event_proposals_path(@event) %>
+                            (<%= link_to "Bulk edit", manage_event_proposals_path(@event) %>)
+                            <% unless @event.accepting_proposals? %>
+                              (<%= link_to "Add new", new_event_proposal_path(@event) %>)
+                            <% end %>
+                            (<%= link_to "Export CSV", formatted_event_proposals_path(@event,:csv) %>)
+                          </li>
                           <% if event_tracks? %>
                             <li><%= link_to "Tracks", tracks_path %></li>
                           <% end %>
@@ -150,9 +166,12 @@
                           <% if event_rooms? %>
                             <li><%= link_to "Rooms", rooms_path %></li>
                           <% end %>
-                          <li><%= link_to "Export CSV", "/events/#{@event.id}/proposals.csv" %></li>
+                          <li><%= link_to "Schedule Items", event_schedule_items_path(@event) %></li>
                         </ul>
-                      </li>
+                      <% end %>
+                    </li>
+                    <% if user_profiles? %>
+                      <li><%= link_to "Users", users_path %></li>
                     <% end %>
                     <li><%= link_to "Snippets", manage_snippets_path %></li>
                     <li><%= link_to "Comments", comments_path %></li>
@@ -196,7 +215,7 @@
         </div><!-- #sidebar-1 -->
 
     <div id="footer">
-    <a href="http://osuosl.org"><img border="0" src="/2009/style/osl-hosted.png" alt="OSL"/></a>
+    <a href="http://osuosl.org"><img border="0" src="http://linuxplumbersconf.org/2009/style/osl-hosted.png" alt="OSL"/></a>
     </div>
 
   </div><!--wrapper -->
